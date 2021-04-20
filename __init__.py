@@ -1,0 +1,1 @@
+from magneticfielddb.magneticfielddb import *
