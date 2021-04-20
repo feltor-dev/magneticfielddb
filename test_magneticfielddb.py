@@ -1,5 +1,4 @@
 import pytest
-#from magneticfielddb import magneticfielddb as mag
 import magneticfielddb as mag
 import os.path
 
@@ -14,10 +13,12 @@ def test_selection () :
 def test_list() :
     print ( "TEST LIST")
 
+    #test listing
+    for p in mag.files() :
+        print( p )
+    #test if list can be selected
     for p in mag.files() :
         m = mag.select(p)
         print(m)
-    for p in mag.files() :
-        print( p )
 
 

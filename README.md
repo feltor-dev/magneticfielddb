@@ -18,7 +18,7 @@ git clone https://github.com/feltor-dev/magneticfielddb
 cd path/to/magneticfielddb
 pip install -e . # editable installation of the module
 # ... if asked, cancel all password prompts ...
-pytest . # run the unittests
+pytest --capture=tee-sys . # run the unittests
 ```
 
 ## Usage
