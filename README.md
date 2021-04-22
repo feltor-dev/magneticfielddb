@@ -35,7 +35,17 @@ for f in mag.files() :
     # print to stdout
     print( coefficients)
 ```
+## Package Notes
+- each file contains at least the "equilibrium", "R_0" and "description" fields
+- "R_0" is given in units of meter
+- "PP" and "PI" are 1 by default
 
+## Github Additional Files
+
+- polynomial_field.py is an example program of how to fit polynomial coefficients to given equilibrium
+- OneSizeFitsAllEquilbrium.nb is a Mathematica notebook that generates solovev coefficients
+- geometry_diag.ipynb is a jupyter notebook that plots all equilibria once for reference
+- all files with X-points are normalized such that (first) X-point lies on the Psip=0 surface
 
 ## Contributions
 

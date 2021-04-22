@@ -2,7 +2,7 @@
 
 import json
 import os.path
-# After two days of trying to get importlib_resources to run I give up on it
+# MW: After two days of trying to get importlib_resources to run I give up on it
 # even though it is supposed to be the faster and more modern option
 # import importlib_resources as res
 import pkg_resources as res
@@ -18,14 +18,8 @@ def select( path, *paths) :
     Return:
     dict : A dictionary containing the contents of the chosen file
     """
-    #ref = res.files("magneticfielddb" ).joinpath( os.path.join( "data", path, *paths))
-
-    #with res.as_file(ref) as data_path :
-    #    with open( data_path) as data_file :
-    #        #print( data_file)
-    #        data = json.load( data_file)
-    #        return data
-    ref = res.resource_string( "magneticfielddb", os.path.join( "data", path, *paths))
+    ref = res.resource_string( "magneticfielddb",
+            os.path.join( "data", path, *paths))
     return json.loads( ref)
 
 def files() :
@@ -38,7 +32,6 @@ def files() :
     """
     base = "magneticfielddb"
     file_list = list()
-    #relpath = res.files("magneticfielddb").joinpath("data")
 
     def inner_list_files( directory_name, file_list) :
         for f in res.resource_listdir(base,directory_name) :

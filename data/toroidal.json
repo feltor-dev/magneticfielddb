@@ -1,4 +1,5 @@
 {
     "equilibrium" : "toroidal",
+    "description" : "none",
     "R_0" : 10
 }
