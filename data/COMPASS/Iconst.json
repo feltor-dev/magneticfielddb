@@ -22,5 +22,6 @@
     "elongation" : 1.75,
     "equilibrium" : "solovev",
     "inverseaspectratio" : 0.41071428571428575,
-    "triangularity" : 0.46999999999999997
+    "triangularity" : 0.47,
+    "comment" : "Mathematica; geometry_params_Xpoint.json in Feltor"
 }

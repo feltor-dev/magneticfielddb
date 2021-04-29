@@ -1,8 +1,8 @@
 {
-	"A": 0,
+	"A": 0.0,
 	"R_0": 0.545,
-   	"PP": 1,
-   	"PI": 1,
+   	"PP": 1.0,
+   	"PI": 1.0,
 	"c":
     [
 		0.072597888572520090,
@@ -22,5 +22,6 @@
     "description" : "standardX",
 	"inverseaspectratio": 0.3211009174311926,
 	"triangularity": 0.3,
-	"elongation": 1.44
+	"elongation": 1.44,
+    "comment" : "Mathematica; eye fit of Fig. 3 in R Panek et al 2015 Plasma Phys. Control. Fusion 58 014015"
 }

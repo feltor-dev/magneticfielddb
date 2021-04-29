@@ -1,5 +1,5 @@
 {
-    "A" : 1,
+    "A" : 1.0,
     "R_0" : 0.56,
     "PP" : 1.0,
     "PI" : 1.0,
@@ -12,15 +12,16 @@
         0.010084171188467612,
         -0.0033426939773477794,
         -0.00010801904592074435,
-        0,
-        0,
-        0,
-        0,
-        0
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
     ],
-    "elongation" : 1,
+    "elongation" : 1.0,
     "equilibrium" : "solovev",
     "description" : "standardO",
     "inverseaspectratio" : 0.41071400000000002,
-    "triangularity" : 0
+    "triangularity" : 0.0,
+    "comment" : "Mathematica; used in Wiesenberger 2014, PhD thesis; geometry_params.json in Feltor"
 }

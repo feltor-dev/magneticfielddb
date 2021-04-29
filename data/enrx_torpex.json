@@ -3,7 +3,7 @@
 	"PI" : -1.0,
 	"PP" : -4.7529517183897567e-06,
 	"R_0" : 1.0,
-	"c" : 
+	"c" :
 	[
 		5875.6034936590559,
 		201131.63164937127,
@@ -22,6 +22,7 @@
 	"elongation" : 1.0,
 	"equilibrium" : "solovev",
 	"inverseaspectratio" : 0.20000000000000001,
-	"triangularity" : 0.0
+	"triangularity" : 0.0,
+    "comment": "least squares fit; Matlab geometry file of Torpex equilibrium for Enabling research project: X-point"
 }
 

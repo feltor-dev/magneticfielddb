@@ -39,6 +39,8 @@ for f in mag.files() :
 - each file contains at least the "equilibrium", "R_0" and "description" fields
 - "R_0" is given in units of meter
 - "PP" and "PI" are 1 by default
+- Files may contain a field "comment" that contains a human readable information
+string
 
 ## Github Additional Files
 

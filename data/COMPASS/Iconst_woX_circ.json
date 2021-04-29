@@ -1,5 +1,5 @@
 {
-    "A" : 0,
+    "A" : 0.0,
     "R_0" : 0.56,
     "PP" : 1.0,
     "PI" : 1.0,
@@ -19,8 +19,8 @@
         0
     ],
     "description": "standardO",
-    "elongation" : 1,
+    "elongation" : 1.0,
     "equilibrium" : "solovev",
     "inverseaspectratio" : 0.41071400000000002,
-    "triangularity" : 0
+    "triangularity" : 0.0
 }

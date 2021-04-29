@@ -75,6 +75,7 @@
 	"elongation" : 1.5,
 	"equilibrium" : "polynomial",
 	"inverseaspectratio" : 0.27593818984547458,
-	"triangularity" : 0.40000000000000002
+	"triangularity" : 0.4,
+    "comment": "least squares fit; Matlab geometry file of TCV equilibrium for Enabling research project: X-point"
 }
 
