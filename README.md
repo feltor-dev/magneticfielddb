@@ -54,5 +54,5 @@ string
 Contributions are welcome.
 ## Authors
 
-Matthias Wiesenberger
+Matthias Wiesenberger and Markus Held
 
