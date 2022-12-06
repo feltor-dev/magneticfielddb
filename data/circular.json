@@ -1,6 +1,8 @@
 {
     "equilibrium" : "circular",
     "description" : "standardO",
-    "I_0" : 20.0,
-    "R_0" : 10.0
+    "I_0" : 10.0,
+    "R_0" : 3.0,
+    "a" : 1.0,
+    "b" : 1.0
 }
