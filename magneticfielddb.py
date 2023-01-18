@@ -19,7 +19,8 @@ def select( path, *paths) :
     dict : A dictionary containing the contents of the chosen file
     """
     ref = res.resource_string( "magneticfielddb",
-            os.path.join( "data", path, *paths))
+            os.path.join( "data", path, *paths)).decode("utf-8")
+    # resrouce_string returns a string of bytes (not an actual string)
     return json.loads( ref)
 
 def files() :

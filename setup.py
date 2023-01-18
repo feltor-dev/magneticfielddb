@@ -32,6 +32,6 @@ setuptools.setup(
         "Topic :: Utilities",
     ],
     python_requires='>=3.6',
-    setup_requires=['pytest-runner', 'importlib_resources'],
+    setup_requires=['pytest-runner'],
     tests_require=['pytest']
 )
