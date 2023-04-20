@@ -1,8 +1,6 @@
 #!/bin/bash
 
-: ${FELTOR_PATH:="../feltor"}
-
-make -C $FELTOR_PATH/inc/geometries geometry_diag device=omp
+make geometry_diag device=cpu
 
 rm -f $2 # in case the file is opened elsewhere
-$FELTOR_PATH/inc/geometries/geometry_diag $1 $2
+./geometry_diag $1 $2
