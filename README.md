@@ -46,7 +46,7 @@ string
 
 - `polynomial_field.py` is an example program of how to fit polynomial coefficients to given equilibrium. Read the doxygen documentation on 
    [`dg::geo::createMagneticField`](https://mwiesenberger.github.io/feltor/geometries/html/group__geom.html#gaa0da1d1c2db65f1f4b28d77307ad238b) to find out about valid fields in your `json` file
-- `normalize_params.cpp` is a C++ program that should be used once on the output of `polynomial_field.py` (all files with X-points must be normalized such that (first/innver) X-point lies on the Psip=0 surface). Compile with `make` and run with `./normalize_params your-params.json your-params.json` to update parameters in-place.
+- `normalize_params.cpp` is a C++ program that should be used once on the output of `polynomial_field.py` (all files with X-points must be normalized such that the X-point closest to the O-point lies on the Psip=0 surface). Compile with `make` and run with `./normalize_params your-params.json your-params.json` to update parameters in-place.
 - `OneSizeFitsAllEquilbrium.nb` is a Mathematica notebook that generates solovev coefficients
 - `q-profiles.ipynb` is a jupyter notebook that plots q-profiles and flux surfaces for all equilibria in the database using `geometry_diag.cpp` and `simplesimdb`
 - `geometry_diag.ipynb` is a jupyter notebook that shows how newly made parameters behave in Feltor and how wall and sheath parameters should be setup for a 3d simulation `geometry_diag.cpp` and `simplesimdb`
