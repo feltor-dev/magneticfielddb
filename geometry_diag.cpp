@@ -55,9 +55,21 @@ int main( int argc, char* argv[])
     double Rmax=mag.R0()+boxscaleRp*mag.params().a();
     double Zmax=boxscaleZp*mag.params().a();
     dg::Grid2d sheath_walls( Rmin, Rmax, Zmin, Zmax, 1,1,1);
-    //std::string sheath_bc = js["boundary"]["sheath"].get("type", "none").asString();
-    //if( sheath_bc != "none")
-    dg::geo::createSheathRegion( js["boundary"]["sheath"],
+    bool compute_fsa = false, compute_sheath = false, compute_q = false;
+    for( unsigned i=0; i<js["diagnostics"].size(); i++)
+    {
+        std::string flag = js["diagnostics"].get(i,"fsa").asString();
+        if( flag  == "fsa")
+            compute_fsa = true;
+        else if( flag == "sheath" )
+            compute_sheath = true;
+        else if( flag == "q-profile" )
+            compute_q = true;
+        else
+            throw std::runtime_error( "diagnostics "+flag+" not recognized!\n");
+    }
+    if( compute_sheath)
+        dg::geo::createSheathRegion( js["boundary"]["sheath"],
             mag, wall, sheath_walls, sheath);
 
     dg::geo::description mag_description = mag.params().getDescription();
@@ -84,7 +96,7 @@ int main( int argc, char* argv[])
             std::cout << " (maximum)"<<std::endl;
         double psip0 = mag.psip()(mag.R0(), 0);
         std::cout << "psip( R_0, 0) = "<<psip0<<"\n";
-        double fx_0 = js["grid"].get( "fx_0", 1./8.).asDouble(); // must evenly divide Npsi
+        double fx_0 = 0.125; // must evenly divide Npsi
         psipmax = -fx_0/(1.-fx_0)*psipO;
     }
     double width_factor = js.get("width-factor",1.0).asDouble();
@@ -93,7 +105,6 @@ int main( int argc, char* argv[])
     if( deltaPsi < 1e-14) // protect against toroidal
         deltaPsi = 0.1;
 
-    double maxPhi = 2.*M_PI*js["boundary"]["sheath"].get("max_angle", 0.1).asDouble();
     std::vector<std::tuple<std::string, dg::HVec, std::string> > map1d;
     //Generate list of functions to evaluate
     std::vector< std::tuple<std::string, std::string, dg::geo::CylindricalFunctor >> map{
@@ -147,8 +158,22 @@ int main( int argc, char* argv[])
         {"CurvatureKappaGradPsip", "(Toroidal) Kappa curvature dot the gradient of Psip", dg::geo::ScalarProduct( dg::geo::createCurvatureKappa(mag, +1), dg::geo::createGradPsip(mag))},
         {"TrueCurvatureNablaBGradPsip", "True Nabla B curvature dot the gradient of Psip", dg::geo::ScalarProduct( dg::geo::createTrueCurvatureNablaB(mag), dg::geo::createGradPsip(mag))},
         {"TrueCurvatureKappaGradPsip", "True Kappa curvature dot the gradient of Psip", dg::geo::ScalarProduct( dg::geo::createTrueCurvatureKappa(mag), dg::geo::createGradPsip(mag))},
+        //////////////////////////////////
+        {"Iris", "A flux aligned Iris", dg::compose( dg::Iris( 0.5, 0.7), dg::geo::RhoP(mag))},
+        {"Pupil", "A flux aligned Pupil", dg::compose( dg::Pupil(0.7), dg::geo::RhoP(mag)) },
+        {"PsiLimiter", "A flux aligned Heaviside", dg::compose( dg::Heaviside( 1.03), dg::geo::RhoP(mag) )},
+        {"MagneticTransition", "The region where the magnetic field is modified", transition},
+        {"Delta", "A flux aligned Gaussian peak", dg::compose( dg::GaussianX( psipO*0.2, deltaPsi, 1./(sqrt(2.*M_PI)*deltaPsi)), mag.psip())},
+        ////
+        { "Hoo", "The novel h02 factor", dg::geo::Hoo( mag) },
+        {"Wall", "Penalization region that acts as the wall", wall },
+        {"WallDistance", "Distance to closest wall", dg::geo::CylindricalFunctor( dg::WallDistance( sheath_walls)) }
+    };
+    double maxPhi = 0;
+    if ( compute_sheath)
+        maxPhi = 2.*M_PI*js["boundary"]["sheath"].get("max_angle", 0.1).asDouble();
+    std::vector< std::tuple<std::string, std::string, dg::geo::CylindricalFunctor >> sheath_map{
         /////////////////////////////////////
-        {"WallDistance", "Distance to closest wall", dg::geo::CylindricalFunctor( dg::WallDistance( sheath_walls)) },
         {"WallFieldlineAnglePDistance", "Distance to wall along fieldline",
             dg::geo::WallFieldlineDistance( dg::geo::createBHat(mod_mag),
                     sheath_walls, maxPhi, 1e-6, "phi") },
@@ -163,16 +188,7 @@ int main( int argc, char* argv[])
                     sheath_walls, -maxPhi, 1e-6, "s") },
         {"Sheath", "Sheath region", sheath},
         {"SheathDirection", "Direction of magnetic field relative to sheath", dg::geo::WallDirection(mag, sheath_walls) },
-        {"SheathCoordinate", "Coordinate from -1 to 1 of magnetic field relative to sheath", dg::geo::WallFieldlineCoordinate( dg::geo::createBHat( mod_mag), sheath_walls, maxPhi, 1e-6, "s")},
-        //////////////////////////////////
-        {"Iris", "A flux aligned Iris", dg::compose( dg::Iris( 0.5, 0.7), dg::geo::RhoP(mag))},
-        {"Pupil", "A flux aligned Pupil", dg::compose( dg::Pupil(0.7), dg::geo::RhoP(mag)) },
-        {"PsiLimiter", "A flux aligned Heaviside", dg::compose( dg::Heaviside( 1.03), dg::geo::RhoP(mag) )},
-        {"Wall", "Penalization region that acts as the wall", wall },
-        {"MagneticTransition", "The region where the magnetic field is modified", transition},
-        {"Delta", "A flux aligned Gaussian peak", dg::compose( dg::GaussianX( psipO*0.2, deltaPsi, 1./(sqrt(2.*M_PI)*deltaPsi)), mag.psip())},
-        ////
-        { "Hoo", "The novel h02 factor", dg::geo::Hoo( mag) }
+        {"SheathCoordinate", "Coordinate from -1 to 1 of magnetic field relative to sheath", dg::geo::WallFieldlineCoordinate( dg::geo::createBHat( mod_mag), sheath_walls, maxPhi, 1e-6, "s")}
     };
 
     ///////////TEST CURVILINEAR GRID TO COMPUTE FSA QUANTITIES
@@ -183,10 +199,13 @@ int main( int argc, char* argv[])
     /// -------  Elements for fsa on X-point grid ----------------
     std::unique_ptr<dg::geo::CurvilinearGrid2d> gX2d;
     dg::direction integration_dir = psipO<psipmax ? dg::forward : dg::backward;
-    if( mag_description == dg::geo::description::standardX ||
+    if( compute_fsa &&
+        (
+        mag_description == dg::geo::description::standardX ||
         mag_description == dg::geo::description::standardO ||
         mag_description == dg::geo::description::square ||
         mag_description == dg::geo::description::doubleX
+        )
         )
     {
         std::cout << "Generate orthogonal flux-aligned grid ... \n";
@@ -259,17 +278,18 @@ int main( int argc, char* argv[])
             dg::blas1::pointwiseDivide( integral1d, dvdpsip, integral1d);
             map1d.emplace_back( std::get<0>(tp)+"_dfs", integral1d,
                 std::get<1>(tp)+" (Flux current derivative)");
-
-
         }
     }
     /// --------- More flux labels --------------------------------
     dg::Grid1d grid1d(psipO<psipmax ? psipO : psipmax,
-            psipO<psipmax ? psipmax : psipO, npsi ,Npsi,dg::DIR_NEU); //inner value is always zero
-    if( mag_description == dg::geo::description::standardX ||
+            psipO<psipmax ? psipmax : psipO, npsi, Npsi,dg::DIR_NEU); //inner value is always zero
+    if( compute_q &&
+        (
+        mag_description == dg::geo::description::standardX ||
         mag_description == dg::geo::description::standardO ||
         mag_description == dg::geo::description::square ||
         mag_description == dg::geo::description::doubleX
+        )
         )
     {
         dg::HVec rho = dg::evaluate( dg::cooX1d, grid1d);
@@ -304,7 +324,7 @@ int main( int argc, char* argv[])
                     dg::geo::findXpoint( mag.get_psip(), RX, Z2X);
                 }
                 dg::Grid2d grid2d_tmp(Rmin,Rmax,ZX,Z2X, n,Nx,Ny);
-                double width_factor = js.get("width-factor",1.0).asDouble();
+                double width_factor = js.get("width-factor",0.03).asDouble();
                 dg::geo::SafetyFactorAverage qprof_avg(grid2d_tmp, mag, width_factor);
                 dg::HVec qprofile_avg( psi_vals);
                 dg::blas1::evaluate( qprofile_avg, dg::equals(), qprof_avg, psi_vals);
@@ -376,10 +396,13 @@ int main( int argc, char* argv[])
             pair.first.data(), pair.second.size(), pair.second.data());
 
     int dim1d_ids[1], dim2d_ids[2], dim3d_ids[3] ;
-    if( mag_description == dg::geo::description::standardX ||
+    if( compute_fsa &&
+        (
+        mag_description == dg::geo::description::standardX ||
         mag_description == dg::geo::description::standardO ||
         mag_description == dg::geo::description::square ||
         mag_description == dg::geo::description::doubleX
+        )
         )
     {
         int dim_idsX[2] = {0,0};
@@ -448,17 +471,41 @@ int main( int argc, char* argv[])
         std::string coordinates = "zc yc xc";
         err = nc_put_att_text( ncid, vectorID3d, "coordinates", coordinates.size(), coordinates.data());
         dg::Timer t;
-        t.tic();
         hvisual = dg::evaluate( std::get<2>(tp), grid2d);
-        t.toc();
-        if((    std::get<0>(tp).find("Wall") != std::string::npos)
-            ||( std::get<0>(tp).find("Sheath") != std::string::npos))
-            std::cout<< std::get<0>(tp) << " took "<<t.diff()<<"s\n";
         dg::extend_line( grid2d.size(), grid3d.Nz(), hvisual, hvisual3d);
         dg::assign( hvisual, fvisual);
         dg::assign( hvisual3d, fvisual3d);
         err = nc_put_var_float( ncid, vectorID, fvisual.data());
         err = nc_put_var_float( ncid, vectorID3d, fvisual3d.data());
+    }
+    if( compute_sheath)
+    {
+        for(auto tp : sheath_map)
+        {
+            int vectorID, vectorID3d;
+            err = nc_def_var( ncid, std::get<0>(tp).data(), NC_FLOAT, 2,
+                &dim2d_ids[0], &vectorID);
+            err = nc_def_var( ncid, (std::get<0>(tp)+"3d").data(), NC_FLOAT, 3,
+                &dim3d_ids[0], &vectorID3d);
+            err = nc_put_att_text( ncid, vectorID, "long_name",
+                std::get<1>(tp).size(), std::get<1>(tp).data());
+            err = nc_put_att_text( ncid, vectorID3d, "long_name",
+                std::get<1>(tp).size(), std::get<1>(tp).data());
+            std::string coordinates = "zc yc xc";
+            err = nc_put_att_text( ncid, vectorID3d, "coordinates", coordinates.size(), coordinates.data());
+            dg::Timer t;
+            t.tic();
+            hvisual = dg::evaluate( std::get<2>(tp), grid2d);
+            t.toc();
+            if((    std::get<0>(tp).find("Wall") != std::string::npos)
+                ||( std::get<0>(tp).find("Sheath") != std::string::npos))
+                std::cout<< std::get<0>(tp) << " took "<<t.diff()<<"s\n";
+            dg::extend_line( grid2d.size(), grid3d.Nz(), hvisual, hvisual3d);
+            dg::assign( hvisual, fvisual);
+            dg::assign( hvisual3d, fvisual3d);
+            err = nc_put_var_float( ncid, vectorID, fvisual.data());
+            err = nc_put_var_float( ncid, vectorID3d, fvisual3d.data());
+        }
     }
     std::cout << "WRTING 3D FIELDS ... \n";
     //compute & write 3d vectors

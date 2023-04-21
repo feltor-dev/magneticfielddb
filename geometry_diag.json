@@ -29,6 +29,7 @@
             "max_angle": 1e-3
         }
     },
+    "diagnostics": [], //["q-profile", "fsa", "sheath"],
     "magnetic_field":
     {
         "input" : "file",
