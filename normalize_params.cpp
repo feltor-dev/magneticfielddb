@@ -45,6 +45,11 @@ int main( int argc, char* argv[])
             return -1;
         }
     }
+    //Find O-point
+    double RO = mag.R0(), ZO = 0.;
+    dg::geo::findOpoint( mag.get_psip(), RO, ZO);
+    const double psipO = mag.psip()( RO, ZO);
+    std::cout << "O-point found at "<<RO<<" "<<ZO<<" with Psip = "<<psipO<<std::endl;
     double RX = mag.R0()-1.1*mag.params().triangularity()*mag.params().a();
     double ZX = -1.1*mag.params().elongation()*mag.params().a();
     try{
@@ -54,8 +59,19 @@ int main( int argc, char* argv[])
         std::cerr << e.what() << std::endl;
         return -1.;
     }
-    const double psipX = mag.psip()( RX, ZX);
+    double psipX = mag.psip()( RX, ZX);
     std::cout << "X-point found at "<<RX<<" "<<ZX<<" with Psip = "<<psipX<<std::endl;
+    dg::geo::description mag_description = mag.params().getDescription();
+    if ( mag_description == dg::geo::description::doubleX)
+    {
+        double ZX2 = -ZX;
+        dg::geo::findXpoint( mag.get_psip(), RX, ZX2);
+        double psipX2 = mag.psip()( RX, ZX2);
+        std::cout << "2nd X-point found at "<<RX<<" "<<ZX2<<" with Psip = "<<psipX2<<std::endl;
+        if( fabs(psipX2 - psipO ) < fabs( psipX - psipO) ) // psipX2 closer to O-point?
+            psipX = psipX2;
+    }
+
 
     Json::Value output;
     if( equi == dg::geo::equilibrium::solovev)
