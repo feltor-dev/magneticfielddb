@@ -42,13 +42,14 @@ for f in mag.files() :
 - Files may contain a field "comment" that contains human readable information
 string
 
-## Github Additional Files
+## Additional Resources
 
-- `polynomial_field.py`. is an example program of how to fit polynomial coefficients to given equilibrium
+- `polynomial_field.py`. is an example program of how to fit polynomial coefficients to given equilibrium. Read the doxygen documentation on 
+   [`dg::geo::createMagneticField`](https://mwiesenberger.github.io/feltor/geometries/html/group__geom.html#gaa0da1d1c2db65f1f4b28d77307ad238b) to find out about valid fields in your `json` file
 - `OneSizeFitsAllEquilbrium.nb` is a Mathematica notebook that generates solovev coefficients
 - `geometry_diag.ipynb` is a jupyter notebook that plots all equilibria once for reference using `geometry_diag.cpp` and `simplesimdb`
-- `geometry_diag.cpp` is a C++ program that can compute various magnetic field quantities given the magnetic parameters. The jupyter notebook requires it. Compile with make.
-- `normalize_params.cpp` is a C++ program that should be used once on the output of `polynomial_field.py` (all files with X-points must be normalized such that (first) X-point lies on the Psip=0 surface)
+- `geometry_diag.cpp` is a C++ program that can compute various magnetic field quantities given the magnetic parameters. The jupyter notebook requires it. Compile with `make` and run with `./geometry_diag geometry_diag.json output.nc` 
+- `normalize_params.cpp` is a C++ program that should be used once on the output of `polynomial_field.py` (all files with X-points must be normalized such that (first) X-point lies on the Psip=0 surface). Compile with `make` and run with `./normalize_params your-params.json your-params.json` to update parameters in-place.
 
 ## Contributions
 
