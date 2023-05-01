@@ -8,10 +8,7 @@ include $(FELTOR_PATH)/config/devices/devices.mk
 
 INCLUDE+=-I$(FELTOR_PATH)/inc/
 
-all: geometry_diag normalize_params
-
-geometry_diag: geometry_diag.cpp
-	$(CC) $(OPT) $(CFLAGS) $< -o $@ $(INCLUDE) $(LIBS) $(JSONLIB) -g
+all: normalize_params
 
 normalize_params: normalize_params.cpp
 	$(CC) $(OPT) $(CFLAGS) $< -o $@ $(INCLUDE) $(LIBS) $(JSONLIB) -g
@@ -19,4 +16,4 @@ normalize_params: normalize_params.cpp
 .PHONY: clean
 
 clean:
-	rm -f geometry_diag normalize_params
+	rm -f normalize_params
