@@ -46,8 +46,17 @@ int main( int argc, char* argv[])
         }
     }
     //Find O-point
-    double RO = mag.R0(), ZO = 0.;
-    dg::geo::findOpoint( mag.get_psip(), RO, ZO);
+    double RO = mag.R0(), ZO = 0.0;
+    try
+    {
+        dg::geo::findOpoint( mag.get_psip(), RO, ZO);
+    }
+    catch ( std::exception& e)
+    {
+        std::cerr << "ERROR: O-point not found close to ("<<mag.R0()<<", "<<"0). The O-point is expected to lie somewhere near (R,Z) = (R_0, 0), such that Newton iteration can find it! \n";
+        std::cerr << e.what() << std::endl;
+        return -1.;
+    }
     const double psipO = mag.psip()( RO, ZO);
     std::cout << "O-point found at "<<RO<<" "<<ZO<<" with Psip = "<<psipO<<std::endl;
     double RX = mag.R0()-1.1*mag.params().triangularity()*mag.params().a();
@@ -56,6 +65,9 @@ int main( int argc, char* argv[])
         dg::geo::findXpoint( mag.get_psip(), RX, ZX);
     }catch ( std::exception& e)
     {
+        double RX = mag.R0()-1.1*mag.params().triangularity()*mag.params().a();
+        double ZX = -1.1*mag.params().elongation()*mag.params().a();
+        std::cerr << "ERROR: X-point not found close to ("<<RX<<", "<< ZX<<"). The X-point is expected to lie somewhere near (R,Z) = (R_0 - 1.1 triangularity * a, -1.1*elongation*a), such that Newton iteration can find it! \n";
         std::cerr << e.what() << std::endl;
         return -1.;
     }
@@ -71,22 +83,26 @@ int main( int argc, char* argv[])
         if( fabs(psipX2 - psipO ) < fabs( psipX - psipO) ) // psipX2 closer to O-point?
             psipX = psipX2;
     }
+    std::cout << "\n";
 
 
     Json::Value output;
     if( equi == dg::geo::equilibrium::solovev)
     {
         dg::geo::solovev::Parameters gp(geom_js);
+        std::cout << "Old zeroth coefficient is c_0 = " << gp.c[0]<<std::endl;
         gp.c[0] = gp.c[0] - psipX/gp.pp/gp.R_0;
         output = gp.dump();
+        std::cout << "New zeroth coefficient is c_0 = " << gp.c[0]<<std::endl;
     }
     else if( equi == dg::geo::equilibrium::polynomial)
     {
         dg::geo::polynomial::Parameters gp(geom_js);
+        std::cout << "Old zeroth coefficient is c_0 = " << gp.c[0]<<std::endl;
         gp.c[0] = gp.c[0] - psipX/gp.pp/gp.R_0;
         output = gp.dump();
+        std::cout << "New zeroth coefficient is c_0 = " << gp.c[0]<<std::endl;
     }
-    std::cout << "Output file "<<argv[2]<<": \n"<< output.toStyledString();
     std::fstream file( argv[2], std::fstream::out | std::fstream::trunc);
     file << output.toStyledString();
     file << std::endl;
