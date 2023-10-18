@@ -2,11 +2,14 @@ import pytest
 import magneticfielddb as mag
 import os.path
 
-# Run with pytest --capture=tee-sys . to see stdout output
+# Run with pytest -s . to see stdout output
 
 def test_selection () :
     print ( "TEST SELECTION")
+    m = mag.select( "COMPASS/compass_1X.json")
+    print( m)
     m = mag.select( "COMPASS", "compass_1X.json")
+    print( m)
     m = mag.select( os.path.join("COMPASS", "compass_1X.json"))
     print( m)
 
