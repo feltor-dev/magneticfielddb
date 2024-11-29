@@ -30,7 +30,6 @@ def files():
             each item in the list can be passed to the select function
     """
     file_list = list()
-    print(abs_path("magneticfielddb"))
 
     def inner_list_files(directory_name, file_list):
         for f in abs_path("magneticfielddb").joinpath(directory_name).iterdir():
