@@ -10,8 +10,11 @@ setup and run Feltor simulations that require geometry coefficients on input.
 
 ## Installation
 We do not yet have an uploaded version on pypi.
-To install you have to clone the repository and then use the package manager [pip](https://pip.pypa.io/en/stable/).
-
+Install directly from github:
+```bash
+pip install git+https://github.com/feltor-dev/magneticfielddb
+```
+or clone the repository and then use the package manager [pip](https://pip.pypa.io/en/stable/).
 ```bash
 git clone https://github.com/feltor-dev/magneticfielddb
 cd path/to/magneticfielddb
