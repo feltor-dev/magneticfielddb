@@ -1,0 +1,94 @@
+# Guide for writing pyproject.toml
+# https://packaging.python.org/en/latest/guides/writing-pyproject-toml/
+[project]
+name = "magneticfielddb"
+description = "Store and access magnetic field coefficients for Feltor"
+authors = [
+    {name = "Matthias Wiesenberger", email = "mattwi@fysik.dtu.dk"},
+]
+license = {file = "LICENSE"}
+readme = "README.md"
+requires-python = ">=3.10" # see scientific-python.org/specs/spec-0000 :
+# no python older than 3 years, no core package older than 2 years
+dependencies = [
+ "importlib-resources>=6.5.2",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Utilities",
+]
+dynamic = ["version"] # build backend fills this field
+
+[project.urls]
+Source = "https://github.com/mwiesenberger/magneticfielddb"
+Tracker = "https://github.com/mwiesenberger/magneticfielddb/issues"
+
+[project.optional-dependencies]
+# with this we can install
+# pip install -e .[test]
+# Note that github may need tests/__init__.py in flat project structure
+test = [
+  "pytest",
+]
+# MW: with this we can install the requirements for the documentation
+docs = [
+    "sphinx >= 5.3",
+    "sphinx_autodoc_typehints >= 1.19",
+    "sphinx-book-theme >= 0.4.0rc1",
+    "myst_nb",
+    "myst_parser",
+]
+
+# https://docs.astral.sh/ruff/
+# pip install -e .[lint]
+lint = [
+  "ruff", # a python linter and formatter
+]
+
+# See setuptools info
+# https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
+[build-system] # which build system to use
+requires = [
+    "setuptools >= 65", # build with setuptools
+    "setuptools-scm >= 8.0.0", # for automatic version from git tags
+]
+build-backend = "setuptools.build_meta"
+
+# https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
+[tool.setuptools]
+# We use the "flat" package layout
+# https://setuptools.pypa.io/en/latest/userguide/package_discovery.html#flat-layout
+# instead of "src" layout
+# https://setuptools.pypa.io/en/latest/userguide/package_discovery.html#src-layout
+py-modules=["magneticfielddb"]
+
+#https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+[tool.setuptools.package-data]
+data = ["*.json"]
+
+# Ruff rules
+# https://docs.astral.sh/ruff/rules/
+[tool.ruff.lint]
+select = [
+    "F", # Pyflakes
+    "E", # pycodestyle error
+    "W", # pycodestyle warning
+    "I", # isort
+    "PT", # flake8-pytest-style
+    "B", # flake8-bugbear
+    "A", # flake8-builtins
+    "C4", # flake8-comprehensions
+    "T10", # flake8-debugger
+    # "PTH", # flake8-use-pathlib
+    "SIM", # flake8-simplify
+    "TCH", # flake8-type-checking
+    "UP", # pyupgrade
+    "FURB", # refurb
+    "PERF", # perflint
+    "RUF", # ruff specific
+    "NPY", # NumPy specific
+]

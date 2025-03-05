@@ -1,5 +1,6 @@
-import magneticfielddb as mag
 import os.path
+
+import magneticfielddb as mag
 
 # Run with pytest -s . to see stdout output
 

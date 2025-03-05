@@ -2,8 +2,13 @@
 
 import json
 import os.path
+from contextlib import suppress
+from importlib.metadata import PackageNotFoundError, version
+
 from importlib_resources import files as abs_path
 
+with suppress(PackageNotFoundError):
+    __version__ = version("magneticfielddb")
 
 def select(path, *paths):
     """Select a file in the data folder
@@ -29,7 +34,7 @@ def files():
             of all files in the data repository
             each item in the list can be passed to the select function
     """
-    file_list = list()
+    file_list = []
 
     def inner_list_files(directory_name, file_list):
         for f in abs_path("magneticfielddb").joinpath(directory_name).iterdir():
