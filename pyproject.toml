@@ -58,42 +58,42 @@ jupyter = [
     "simplesimdb>=1.1.1",
 ]
 
-# # See setuptools info
-# # https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
-# [build-system] # which build system to use
-# requires = [
-#     "setuptools >= 65", # build with setuptools
-#     "setuptools-scm >= 8.0.0", # for automatic version from git tags
-# ]
-# build-backend = "setuptools.build_meta"
-# 
-# # https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
-# [tool.setuptools]
-# # We use the "flat" package layout
-# # https://setuptools.pypa.io/en/latest/userguide/package_discovery.html#flat-layout
-# # instead of "src" layout
-# # https://setuptools.pypa.io/en/latest/userguide/package_discovery.html#src-layout
-# py-modules=["magneticfielddb"]
-# 
-# #https://setuptools.pypa.io/en/latest/userguide/datafiles.html
-# [tool.setuptools.package-data]
-# data = ["*.json"]
-
-# An alternative build system
-[build-system]
+# See setuptools info
+# https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
+[build-system] # which build system to use
 requires = [
-    "hatchling",
-    "hatch-vcs",
+    "setuptools >= 65", # build with setuptools
+    "setuptools-scm >= 8.0.0", # for automatic version from git tags
 ]
-build-backend = "hatchling.build"
-[tool.hatch.build]
-include = ["*.json"]
+build-backend = "setuptools.build_meta"
 
-[tool.hatch.build.targets.sdist]
-include = ["simplesimdb.py"]
+# https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
+[tool.setuptools]
+# We use the "flat" package layout
+# https://setuptools.pypa.io/en/latest/userguide/package_discovery.html#flat-layout
+# instead of "src" layout
+# https://setuptools.pypa.io/en/latest/userguide/package_discovery.html#src-layout
+py-modules=["magneticfielddb"]
 
-[tool.hatch.version]
-source = "vcs"
+#https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+[tool.setuptools.package-data]
+data = ["*.json"]
+
+# # An alternative build system
+# [build-system]
+# requires = [
+#     "hatchling",
+#     "hatch-vcs",
+# ]
+# build-backend = "hatchling.build"
+# [tool.hatch.build]
+# include = ["magneticfielddb.py", "data/*.json"]
+#
+# #[tool.hatch.build.targets.sdist]
+# #include = ["magneticfielddb.py"]
+
+# [tool.hatch.version]
+# source = "vcs"
 
 # Ruff rules
 # https://docs.astral.sh/ruff/rules/
