@@ -9,16 +9,24 @@ setup and run Feltor simulations that require geometry coefficients on input.
 [![LICENSE : MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Installation
-We do not yet have an uploaded version on pypi.
-To install you have to clone the repository and then use the package manager [pip](https://pip.pypa.io/en/stable/).
-> You need python3 (>3.6) to install this module
-
+We do not (yet) have an uploaded version on pypi.
+Install directly from github:
+```bash
+pip install git+https://github.com/feltor-dev/magneticfielddb
+```
+OR clone the repository and then use the package manager [pip](https://pip.pypa.io/en/stable/).
 ```bash
 git clone https://github.com/feltor-dev/magneticfielddb
-cd path/to/magneticfielddb
-pip install -e . # editable installation of the module
-# ... if asked, cancel all password prompts ...
+cd magneticfielddb
+pip install . # local installation of the module
+pip install .[test] # Install pytest
 pytest --capture=tee-sys . # run the unittests
+```
+
+In order to locally run the included jupyter-notebooks you can use
+```bash
+pip install .[jupyter] # Install all necessary dependencies
+jupyter-lab # run notebooks
 ```
 
 ## Usage
@@ -44,7 +52,7 @@ string
 
 ## Additional Resources
 
-- `polynomial_field.ipynb` is an example program of how to fit polynomial coefficients to given equilibrium. Read the doxygen documentation on
+- `polynomial_field.ipynb` is an example notebook of how to fit polynomial coefficients to given equilibrium. Read the doxygen documentation on
    [`dg::geo::createMagneticField`](https://mwiesenberger.github.io/feltor/geometries/html/group__geom.html#gaa0da1d1c2db65f1f4b28d77307ad238b) to find out about valid fields in your `json` file
 - `normalize_params.cpp` is a C++ program that should be used on geometry input files (all files with X-points must be normalized such that the X-point closest to the O-point lies on the Psip=0 surface). Compile with `make` and run with `./normalize_params your-params.json your-params.json` to update parameters in-place.
 - `OneSizeFitsAllEquilbrium.nb` is a Mathematica notebook that generates solovev coefficients
@@ -57,8 +65,3 @@ Contributions are welcome.
 ## Authors
 
 Matthias Wiesenberger and Markus Held
-
-
-```python
-
-```
