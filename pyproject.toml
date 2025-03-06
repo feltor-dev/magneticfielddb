@@ -49,26 +49,51 @@ lint = [
   "ruff", # a python linter and formatter
 ]
 
-# See setuptools info
-# https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
-[build-system] # which build system to use
-requires = [
-    "setuptools >= 65", # build with setuptools
-    "setuptools-scm >= 8.0.0", # for automatic version from git tags
+jupyter = [
+    "jupyterlab>=4.3.5",
+    "matplotlib>=3.10.1",
+    "netcdf4>=1.7.2",
+    "numpy>=2.2.3",
+    "scipy>=1.15.2",
+    "simplesimdb>=1.1.1",
 ]
-build-backend = "setuptools.build_meta"
 
-# https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
-[tool.setuptools]
-# We use the "flat" package layout
-# https://setuptools.pypa.io/en/latest/userguide/package_discovery.html#flat-layout
-# instead of "src" layout
-# https://setuptools.pypa.io/en/latest/userguide/package_discovery.html#src-layout
-py-modules=["magneticfielddb"]
+# # See setuptools info
+# # https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
+# [build-system] # which build system to use
+# requires = [
+#     "setuptools >= 65", # build with setuptools
+#     "setuptools-scm >= 8.0.0", # for automatic version from git tags
+# ]
+# build-backend = "setuptools.build_meta"
+# 
+# # https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
+# [tool.setuptools]
+# # We use the "flat" package layout
+# # https://setuptools.pypa.io/en/latest/userguide/package_discovery.html#flat-layout
+# # instead of "src" layout
+# # https://setuptools.pypa.io/en/latest/userguide/package_discovery.html#src-layout
+# py-modules=["magneticfielddb"]
+# 
+# #https://setuptools.pypa.io/en/latest/userguide/datafiles.html
+# [tool.setuptools.package-data]
+# data = ["*.json"]
 
-#https://setuptools.pypa.io/en/latest/userguide/datafiles.html
-[tool.setuptools.package-data]
-data = ["*.json"]
+# An alternative build system
+[build-system]
+requires = [
+    "hatchling",
+    "hatch-vcs",
+]
+build-backend = "hatchling.build"
+[tool.hatch.build]
+include = ["*.json"]
+
+[tool.hatch.build.targets.sdist]
+include = ["simplesimdb.py"]
+
+[tool.hatch.version]
+source = "vcs"
 
 # Ruff rules
 # https://docs.astral.sh/ruff/rules/
@@ -92,3 +117,4 @@ select = [
     "RUF", # ruff specific
     "NPY", # NumPy specific
 ]
+
