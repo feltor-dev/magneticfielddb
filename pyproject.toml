@@ -34,17 +34,17 @@ Tracker = "https://github.com/mwiesenberger/magneticfielddb/issues"
 test = [
   "pytest",
 ]
-# MW: with this we can install the requirements for the documentation
-docs = [
-    "sphinx >= 5.3",
-    "sphinx_autodoc_typehints >= 1.19",
-    "sphinx-book-theme >= 0.4.0rc1",
-    "myst_nb",
-    "myst_parser",
-]
+# # MW: with this we can install the requirements for the documentation
+# docs = [
+#     "sphinx >= 5.3",
+#     "sphinx_autodoc_typehints >= 1.19",
+#     "sphinx-book-theme >= 0.4.0rc1",
+#     "myst_nb",
+#     "myst_parser",
+# ]
 
 # https://docs.astral.sh/ruff/
-# pip install -e .[lint]
+# pip install .[lint]
 lint = [
   "ruff", # a python linter and formatter
 ]
