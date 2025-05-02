@@ -58,42 +58,18 @@ jupyter = [
     "simplesimdb>=1.1.1",
 ]
 
-# See setuptools info
-# https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
-[build-system] # which build system to use
+# An alternative build system
+[build-system]
 requires = [
-    "setuptools >= 65", # build with setuptools
-    "setuptools-scm >= 8.0.0", # for automatic version from git tags
+    "hatchling",
+    "hatch-vcs",
 ]
-build-backend = "setuptools.build_meta"
+build-backend = "hatchling.build"
+[tool.hatch.build]
+include = ["magneticfielddb.py", "magneticfielddb-data"] # Give everything a nice unique name so pip won't have nameing collisions : https://github.com/pypa/pip/issues/4625
 
-# https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
-[tool.setuptools]
-# We use the "flat" package layout
-# https://setuptools.pypa.io/en/latest/userguide/package_discovery.html#flat-layout
-# instead of "src" layout
-# https://setuptools.pypa.io/en/latest/userguide/package_discovery.html#src-layout
-py-modules=["magneticfielddb"]
-
-#https://setuptools.pypa.io/en/latest/userguide/datafiles.html
-[tool.setuptools.package-data]
-data = ["*.json"]
-
-# # An alternative build system
-# [build-system]
-# requires = [
-#     "hatchling",
-#     "hatch-vcs",
-# ]
-# build-backend = "hatchling.build"
-# [tool.hatch.build]
-# include = ["magneticfielddb.py", "data/*.json"]
-#
-# #[tool.hatch.build.targets.sdist]
-# #include = ["magneticfielddb.py"]
-
-# [tool.hatch.version]
-# source = "vcs"
+[tool.hatch.version]
+source = "vcs"
 
 # Ruff rules
 # https://docs.astral.sh/ruff/rules/
