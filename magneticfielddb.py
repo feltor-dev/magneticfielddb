@@ -22,7 +22,7 @@ def select(path, *paths):
     dict : A dictionary containing the contents of the chosen file
     """
     # From docu https://importlib-resources.readthedocs.io/en/latest/using.html
-    file = abs_path("magneticfielddb").joinpath(os.path.join("data", path, *paths))
+    file = abs_path("magneticfielddb").joinpath(os.path.join("magneticfielddb-data", path, *paths))
     return json.loads(file.read_text())
 
 
@@ -45,9 +45,9 @@ def files():
             else:
                 file_list.append(
                     os.path.relpath(
-                        f, os.path.join(abs_path("magneticfielddb"), "data")
+                        f, os.path.join(abs_path("magneticfielddb"), "magneticfielddb-data")
                     )
                 )
 
-    inner_list_files("data", file_list)
+    inner_list_files("magneticfielddb-data", file_list)
     return file_list
